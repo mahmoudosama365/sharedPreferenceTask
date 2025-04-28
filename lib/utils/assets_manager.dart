@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+
+class AssetsManager {
+  static const String iconHome = 'assets/Home.png';
+  static const String icomMap = 'assets/Map_Pin.png';
+  static const String iconFavorite = 'assets/Heart.png';
+  static const String iconProfile = 'assets/User_01.png';
+  static const String selectesHome = 'assets/selected_home.png';
+  static const String selectedMap = 'assets/Map_selected.png';
+  static const String selectedFavorite = 'assets/Heart_selected.png';
+  static const String selectedProfile = 'assets/selected_user.png';
+  static const String birthdayImage = 'assets/Birthday_image.png';
+  static const String selectedfavoriteIcon = 'assets/selectedFavoriteIcon.png';
+  static const String iconSearch = 'assets/iconSearch.png';
+  static const String routeImage = 'assets/routeImage.png';
+  static const String firstOnboardinglight = 'assets/firstOnboardinglight.png';
+  static const String secondOnboardinglight = 'assets/secondOnboardinglight.png';
+  static const String thirdOnboardinglight = 'assets/thirdOnboardinglight.png';
+  static const String fourthOnboardinglight = 'assets/fourthOnboardinglight.png';
+  static const String firstOnboardingdark = 'assets/firstOnboardingdark.png';
+  static const String secondOnboardingdark = 'assets/secondOnboardingdark.png';
+  static const String thirdOnboardingdark = 'assets/thirdOnboardingdark.png';
+  static const String fourthOnboardingdark = 'assets/fourthOnboardingdark.png';
+  static const String onboardingLogo = 'assets/onboarding_logo.png';
+  static const String english = 'assets/english.png';
+  static const String arabic = 'assets/arabic.png';
+  static const String sunIcon = 'assets/SunIcon.png';
+  static const String moonIcon = 'assets/MoonIconn.png';
+  static const String sportEvent = 'assets/sportt.png';
+  static const String meetingEvent = 'assets/Meeting.png';
+  static const String gamingEvent = 'assets/Gaming.png';
+  static const String workShopEvent= 'assets/workShop.png';
+  static const String bookClubEvent = 'assets/Book Club.png';
+  static const String exhibitionEvent = 'assets/Exhibtion.png';
+  static const String holidayEvent = 'assets/Holiday.png';
+  static const String eatingEvent = 'assets/Eating.png';
+  static const String noteEdit = 'assets/editEvent.png';
+  static const String eventDateIcon = 'assets/eventDateIcon.png';
+  static const String clockIcon = 'assets/clockIcon.png';
+  static const String loginLogo = 'assets/loginLogo.png';
+  static const String eyeSlash = 'assets/eye-slash.png';
+  static const String emailIcon = 'assets/emailIcon.png';
+  static const String lockIcon = 'assets/lock_icon.png';
+  static const String nameIcon = 'assets/nameIcon.png';
+  static const String googleIcon = 'assets/GoogleIcon.png';
+  static const String forgetPasswordimg = 'assets/forgetPassImg.png';
+  static const String unSelectedFavoriteIcon = 'assets/unSelectedFavoriteIcon.png';
+}

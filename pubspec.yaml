@@ -41,7 +41,14 @@ dependencies:
   shared_preferences: ^2.5.2
   provider: ^6.1.4
   carousel_slider: ^5.0.0
-  google_fonts: ^6.1.0
+  google_fonts: ^6.2.1
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  animated_toggle_switch: ^0.8.4
+  firebase_core: ^3.13.0
+  cloud_firestore: ^5.6.6
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +68,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -70,8 +77,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/files/Suras/
-    - assets/files/Hadeeth/
   
 
   # An image asset can refer to one or more resolution-specific "variants", see
