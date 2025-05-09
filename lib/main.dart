@@ -7,9 +7,11 @@ import 'package:flutter_application_2/onboarding_screen/start_onboarding.dart';
 import 'package:flutter_application_2/provider/event_list_provider.dart';
 import 'package:flutter_application_2/provider/language_provider.dart';
 import 'package:flutter_application_2/provider/theme_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
 import 'package:flutter_application_2/ui/auth/forget_password/forget_pass_screen.dart';
 import 'package:flutter_application_2/ui/auth/login/login_screen.dart';
 import 'package:flutter_application_2/ui/auth/register/register_screen.dart';
+import 'package:flutter_application_2/ui/event_details/edit_details.dart';
 import 'package:flutter_application_2/ui/home/home_screen.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/add_event.dart';
 import 'package:flutter_application_2/utils/app_theme.dart';
@@ -22,12 +24,13 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
-await FirebaseFirestore.instance.disableNetwork();
+// await FirebaseFirestore.instance.disableNetwork();
  runApp(MultiProvider(
   providers: [
     ChangeNotifierProvider(create: (context)=> LanguageProvider()),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
     ChangeNotifierProvider(create: (context) => EventListProvider()),
+    ChangeNotifierProvider(create: (context) => UserProvider()),
   ],
  child: Evently_app()));
 }
@@ -50,6 +53,7 @@ class Evently_app extends StatelessWidget {
 
       initialRoute: onboardingStart.routeName,
       routes:{
+        EditDetails.routeName : (context) => EditDetails(),
         IntroScreenDemo.routeName : (context) => IntroScreenDemo(),
         HomeScreen.routeName : (context) => HomeScreen(),
         onboardingStart.routeName : (context) => onboardingStart(),

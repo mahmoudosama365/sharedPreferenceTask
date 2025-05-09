@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/model/event.dart';
 import 'package:flutter_application_2/provider/event_list_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
 import 'package:flutter_application_2/utils/appColors.dart';
 import 'package:flutter_application_2/utils/app_styles.dart';
 import 'package:flutter_application_2/utils/assets_manager.dart';
@@ -13,6 +14,7 @@ class EventItem extends StatelessWidget {
   Event event ;
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
      var height = MediaQuery.of(context).size.height ;
      var width = MediaQuery.of(context).size.width ;
      var eventListProvider = Provider.of<EventListProvider>(context);
@@ -74,7 +76,7 @@ class EventItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge ,),
                 ),
                 IconButton(onPressed: (){
-                  eventListProvider.updateIsFavoriteEvents(event);
+                  eventListProvider.updateIsFavoriteEvents(event,userProvider.currentUser!.id);
                 },
                  icon: Image.asset(
                   event.isFavorite == true ?

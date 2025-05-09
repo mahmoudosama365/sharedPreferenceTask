@@ -1,34 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/model/event.dart';
+
 import 'package:flutter_application_2/provider/event_list_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
+import 'package:flutter_application_2/ui/event_details/edit_details.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/event_item.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/event_tab_item.dart';
 import 'package:flutter_application_2/utils/appColors.dart';
 import 'package:flutter_application_2/utils/app_styles.dart';
 import 'package:flutter_application_2/utils/assets_manager.dart';
-import 'package:flutter_application_2/utils/firebase_utils.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
    HomeTab({super.key});
-
+  
   @override
   State<HomeTab> createState() => _HomeTabState();
 }
 
 class _HomeTabState extends State<HomeTab> {
- 
   
+    
+  var userProvider ;
+ 
+ 
 
   @override
   Widget build(BuildContext context) {
+      userProvider = Provider.of<UserProvider>(context);
     var eventListProvider = Provider.of<EventListProvider>(context);
+   
+    
     eventListProvider.getEventNameList(context);
     if (eventListProvider.eventsList.isEmpty){
-       eventListProvider.getAllEvents();
+       eventListProvider.getAllEvents(userProvider.currentUser!.id);
     }
     var height = MediaQuery.of(context).size.height ;
      var width = MediaQuery.of(context).size.width ;
@@ -48,7 +56,7 @@ class _HomeTabState extends State<HomeTab> {
                   style: AppStyles.regular14White,
                 ),
                 Text(
-                  AppLocalizations.of(context)!.routeAcademy,
+                  userProvider.currentUser!.name,
                   style: AppStyles.bold24White,
                 ),
               ],
@@ -100,7 +108,7 @@ class _HomeTabState extends State<HomeTab> {
                   length: eventListProvider.eventNameList.length,
                  child: TabBar(
                   onTap: (index){
-                     eventListProvider.changeSelectedIndex(index);
+                     eventListProvider.changeSelectedIndex(index,userProvider.currentUser!.id);
                   },
                   labelPadding: EdgeInsets.zero,
                   indicatorColor: Appcolors.transparentColor,
@@ -133,7 +141,16 @@ class _HomeTabState extends State<HomeTab> {
                   horizontal: width * 0.04,
                   vertical: height * 0.02
                 ),
-                child: EventItem(event: eventListProvider.filterList[index],),
+                child: InkWell(
+                  onTap: ()async{
+                  
+                
+                    Navigator.pushNamed(context, EditDetails.routeName,
+                    arguments: eventListProvider.filterList[index],
+                      
+              );    
+                  },
+                  child: EventItem(event: eventListProvider.filterList[index],)),
               );
             },
           
@@ -142,5 +159,6 @@ class _HomeTabState extends State<HomeTab> {
       ) ,
     );
   }
+ 
 
 }

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/model/event.dart';
 import 'package:flutter_application_2/provider/event_list_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
 import 'package:flutter_application_2/ui/home/home_screen.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/event_tab_item.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/home_tab.dart';
@@ -18,9 +19,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class AddEvent extends StatefulWidget {
-  const AddEvent({super.key});
+   AddEvent({super.key});
   static const String routeName = 'add_event';
-
+  
   @override
   State<AddEvent> createState() => _AddEventState();
 }
@@ -38,6 +39,7 @@ class _AddEventState extends State<AddEvent> {
      late EventListProvider eventListProvider ;
   @override
   Widget build(BuildContext context) {
+     
     var width = MediaQuery.of(context).size.width;
      var height = MediaQuery.of(context).size.height;
       eventListProvider = Provider.of<EventListProvider>(context);
@@ -235,36 +237,21 @@ class _AddEventState extends State<AddEvent> {
        image: selectedImage,
         time: formatTime!
     ) ;
-    FirebaseUtils.addEventToFireStore(event).timeout(Duration(milliseconds: 500),
-     onTimeout: () {
-      ToastUtils.toastMsg(msg: 'Event Added Successfully',
-      backgroundColor: Appcolors.primaryLight ,
-      textColor: Appcolors.whiteColor );
-       print('Event added successfully. ');
-       eventListProvider.getAllEvents();
-      Navigator.pop(context);
-      
-       
-     },
-    ) ;
+    var userProvider = Provider.of<UserProvider>(context,listen: false);
+    FirebaseUtils.addEventToFireStore(event,userProvider.currentUser!.id).then((value){
+          ToastUtils.toastMsg(msg: 'Event Added Successfully',
+        backgroundColor: Appcolors.primaryLight ,
+        textColor: Appcolors.whiteColor );
+        print('Event added successfully. ');
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
+        Navigator.pop(context);
+    });
+         
+        
+    
   }
    
-  void showAlertdialog(){
-      showDialog(context: context,
-       builder: (context)=>  AlertDialog(
-      title: Text('Event'),
-      content: Text('Event added successfully. ',),
-      contentTextStyle: AppStyles.bold16Black,
-      backgroundColor: Appcolors.whiteColor ,
-      actions: [
-        TextButton(onPressed: (){
-          Navigator.popUntil(context,ModalRoute.withName(HomeScreen.routeName),);
-        },
-         child: Text('Ok,',style: AppStyles.bold16Black,))
-      ],
-  ));
-     
-  }
+  
 
   void chooseDate()async{
      var chooseDate = await showDatePicker(

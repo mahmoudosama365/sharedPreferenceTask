@@ -8,7 +8,8 @@ class CustomTextField extends StatelessWidget {
    CustomTextField({super.key,this.borderColor,this.hintText ,
     this.hintStyle,this.prefixIcon,this.labelText,
     this.labelStyle,this.suffixIcon,this.maxLines,
-    this.controller,this.validator});
+    this.controller,this.validator,this.keyboardInputType,
+    this.obscureText});
   Color? borderColor ;
   String? hintText ;
   TextStyle? hintStyle ;
@@ -19,6 +20,8 @@ class CustomTextField extends StatelessWidget {
   int? maxLines ;
   TextEditingController? controller ;
   MyValidator validator ;
+  TextInputType? keyboardInputType ;
+  bool? obscureText ;
   
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,9 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       controller: controller ,
       maxLines: maxLines ?? 1,
+      obscuringCharacter: '*',
+      keyboardType: keyboardInputType ?? TextInputType.text ,
+      obscureText: obscureText ?? false ,
       cursorColor: Appcolors.primaryLight,
       decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(

@@ -1,13 +1,20 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/model/my_user.dart';
 import 'package:flutter_application_2/onboarding_screen/start_onboarding.dart';
+import 'package:flutter_application_2/provider/event_list_provider.dart';
 import 'package:flutter_application_2/provider/language_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
 import 'package:flutter_application_2/ui/auth/forget_password/forget_pass_screen.dart';
 import 'package:flutter_application_2/ui/auth/register/register_screen.dart';
 import 'package:flutter_application_2/ui/home/home_screen.dart';
 import 'package:flutter_application_2/utils/appColors.dart';
 import 'package:flutter_application_2/utils/app_styles.dart';
 import 'package:flutter_application_2/utils/assets_manager.dart';
+import 'package:flutter_application_2/utils/dialog_utils.dart';
+import 'package:flutter_application_2/utils/firebase_utils.dart';
 import 'package:flutter_application_2/widget/custom_elevated_button.dart';
 import 'package:flutter_application_2/widget/custom_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,9 +28,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text:'mahmoud@route.com');
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController = TextEditingController(text: '123456');
   bool positive = false;
   var formKey = GlobalKey<FormState>() ;
   @override
@@ -51,9 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: Image.asset(AssetsManager.emailIcon),
                     hintText: AppLocalizations.of(context)!.email,
                     controller: emailController,
+                    keyboardInputType: TextInputType.emailAddress ,
                     validator: (text){
-                        if (text == null ||text.isEmpty){
-                        return 'Please enter a valid email address.' ;
+                        if (text == null ||text.trim().isEmpty){
+                        return 'Please enter email' ;
+                      }
+                      final bool emailValid = 
+                         RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(text);
+                      if (!emailValid){
+                        return 'Please enter valid email' ;
                       }
                       return null ;
                     },
@@ -63,11 +77,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: Image.asset(AssetsManager.lockIcon),
                     hintText: AppLocalizations.of(context)!.password,
                     controller: passwordController,
+                    obscureText: true,
+                    keyboardInputType: TextInputType.phone ,
                     suffixIcon: Image.asset(AssetsManager.eyeSlash),
                     validator: (text){
-                        if (text!.isEmpty){
-                        return 'Password is required.' ;
-                      }
+                        if (text == null||text.trim().isEmpty){
+                           return 'Please enter password' ;
+                        }
+                        if(text.length < 6){
+                           return 'Password length should be at least 6 characters' ;
+                        }
                       return null ;
                     },
                   ),
@@ -205,11 +224,57 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login(){
+  void login()async{
     if(formKey.currentState?.validate() == true){
-      Navigator.of(context).pushNamed(HomeScreen.routeName);
+      DialogUtils.showLoading(context: context,
+       message: 'Waiting...');
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+       MyUser? user = await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? '');
+       if (user == null){
+        return;
+       }
+        var userProvider = Provider.of<UserProvider>(context,listen: false);
+        userProvider.updateUser(user);
+        var eventListProvider = Provider.of<EventListProvider>(context,listen: false);
+        eventListProvider.changeSelectedIndex(0, userProvider.currentUser!.id );
+        DialogUtils.hideLoading;
+        DialogUtils.showMessage(context: context,
+        message: 'Login successfully',title: 'Success',posActionName: 'Ok',
+        posAction: (){
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        } );
+        print('Login successfully');
+        print(credential.user?.uid ?? '');
+      } 
+      on FirebaseAuthException catch (e) {
+         if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+         } else if (e.code == 'wrong-password') {
+            print('Wrong password provided for that user.');
+          }
+          else if (e.code == 'invalid-credential') {
+             DialogUtils.hideLoading;
+        DialogUtils.showMessage(context: context,
+        message: 'The supplied auth credential is incorrect, malformed or has expired.',
+        title: 'Error',posActionName: 'Ok');
+            print('The supplied auth credential is incorrect, malformed or has expired.');
+          }
+      } catch(e){
+        DialogUtils.hideLoading;
+        DialogUtils.showMessage(context: context,
+        message:e.toString() ,
+        title: 'Error',posActionName: 'Ok');
+            print('The supplied auth credential is incorrect, malformed or has expired.');
+          print(e);
+      }
+      
     }
      
     
   }
+
 }

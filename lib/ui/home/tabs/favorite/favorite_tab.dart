@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/provider/event_list_provider.dart';
+import 'package:flutter_application_2/provider/user_provider.dart';
 import 'package:flutter_application_2/ui/home/tabs/home_tab/event_item.dart';
 import 'package:flutter_application_2/utils/appColors.dart';
 import 'package:flutter_application_2/utils/app_styles.dart';
@@ -11,11 +12,12 @@ class FavoriteTab extends StatelessWidget {
   const FavoriteTab({super.key});
   @override
   Widget build(BuildContext context) {
+     var userProvider = Provider.of<UserProvider>(context);
      var width = MediaQuery.of(context).size.width ;
     var height = MediaQuery.of(context).size.height ;
     var eventListProvider = Provider.of<EventListProvider>(context);
     if(eventListProvider.favoriteEventsList.isEmpty){
-      eventListProvider.getAllFavoriteEvents();
+      eventListProvider.getAllFavoriteEvents(userProvider.currentUser!.id);
     }
     return  Scaffold(
       body: Padding(

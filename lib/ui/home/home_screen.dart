@@ -8,6 +8,7 @@ import 'package:flutter_application_2/utils/appColors.dart';
 import 'package:flutter_application_2/utils/assets_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
 class HomeScreen extends StatefulWidget {
    HomeScreen({super.key});
   static const String routeName = 'home';
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Appcolors.primaryLight,

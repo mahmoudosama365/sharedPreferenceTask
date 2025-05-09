@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/provider/language_provider.dart';
 import 'package:flutter_application_2/provider/theme_provider.dart';
+import 'package:flutter_application_2/ui/auth/login/login_screen.dart';
 import 'package:flutter_application_2/ui/home/tabs/profile/language_bottom_sheet.dart';
 import 'package:flutter_application_2/ui/home/tabs/profile/theme_bottom_sheet.dart';
 import 'package:flutter_application_2/utils/appColors.dart';
@@ -121,7 +122,9 @@ class _ProfileTabState extends State<ProfileTab> {
                     borderRadius: BorderRadius.circular(16),
                   )
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+                },
                child: Row(
                 children: [
                   Icon(Icons.logout,color: Appcolors.whitecolor,

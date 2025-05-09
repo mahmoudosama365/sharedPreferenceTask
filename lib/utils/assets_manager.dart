@@ -45,4 +45,7 @@ class AssetsManager {
   static const String googleIcon = 'assets/GoogleIcon.png';
   static const String forgetPasswordimg = 'assets/forgetPassImg.png';
   static const String unSelectedFavoriteIcon = 'assets/unSelectedFavoriteIcon.png';
+   static const String calendarIcon= 'assets/calendarIcon.png';
+    static const String iconSelectedMap = 'assets/selectedMap.png';
+
 }
